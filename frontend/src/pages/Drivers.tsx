@@ -20,10 +20,14 @@ export function DriversPage() {
 
   // Events
   async function onTakePlace(from: number, to: number) {
-    const placeTaker = sortedDriversDatabase[from];
-    const placeHolder = sortedDriversDatabase[to];
+    const placeTakerId = sortedDriversDatabase[from].id;
+    const placeHolderId = sortedDriversDatabase[to].id;
 
-    console.log(placeTaker.firstname, placeHolder.firstname);
+    mutate(
+      await fetch(`/api/drivers/${placeTakerId}/takeplace/${placeHolderId}`, {
+        method: "POST",
+      }).then((res) => res.json())
+    );
   }
 
   async function onOvertakeRequested(id: number) {
