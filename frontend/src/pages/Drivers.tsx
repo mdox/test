@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { Link } from "react-router-dom";
 import useSWR from "swr";
 import { Card } from "../components/Card";
@@ -7,10 +9,23 @@ import { DriversDatabase } from "../lib/types";
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export function DriversPage() {
-  // States
+  // useSWR
   const { data, mutate } = useSWR<DriversDatabase>("/api/drivers", fetcher);
 
+  // Memos
+  const sortedDriversDatabase: DriversDatabase = useMemo(() => {
+    if (!data) return [];
+    return data.sort((a, b) => (a.place! < b.place! ? -1 : 1));
+  }, [data]);
+
   // Events
+  async function onTakePlace(from: number, to: number) {
+    const placeTaker = sortedDriversDatabase[from];
+    const placeHolder = sortedDriversDatabase[to];
+
+    console.log(placeTaker.firstname, placeHolder.firstname);
+  }
+
   async function onOvertakeRequested(id: number) {
     mutate(
       await fetch(`/api/drivers/${id}/overtake`, {
@@ -19,12 +34,6 @@ export function DriversPage() {
     );
   }
 
-  // Memos
-  const sortedDriversDatabase: DriversDatabase = useMemo(() => {
-    if (!data) return [];
-    return data.sort((a, b) => (a.place! < b.place! ? -1 : 1));
-  }, [data]);
-
   // Renders
   return (
     <>
@@ -32,15 +41,19 @@ export function DriversPage() {
         <Link to="/">Back to Home please.</Link>
       </p>
 
-      <div className="flex flex-col gap-2 pb-2">
-        {sortedDriversDatabase.map((item) => (
-          <Card
-            key={item.id}
-            {...item}
-            onOvertakeRequested={onOvertakeRequested}
-          />
-        ))}
-      </div>
+      <DndProvider backend={HTML5Backend}>
+        <div className="flex flex-col gap-2 pb-2">
+          {sortedDriversDatabase.map((item, index) => (
+            <Card
+              key={item.id}
+              {...item}
+              index={index}
+              onOvertakeRequested={onOvertakeRequested}
+              onTakePlace={onTakePlace}
+            />
+          ))}
+        </div>
+      </DndProvider>
     </>
   );
 }

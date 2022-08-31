@@ -1,18 +1,70 @@
+import { useRef } from "react";
+import { useDrag, useDrop } from "react-dnd";
 import { Driver } from "../lib/types";
 
 export type CardProps = Driver & {
+  index: number;
   onOvertakeRequested(id: number): void;
+  onTakePlace(from: number, to: number): void;
+};
+
+type DragItem = {
+  index: number;
+  id: string;
+  type: string;
 };
 
 export function Card(props: CardProps) {
+  // Refs
+  const refCardFrame = useRef<HTMLDivElement>(null);
+
+  // DnD
+  const [{ handlerId }, drop] = useDrop<
+    DragItem,
+    void,
+    { handlerId: string | symbol | null }
+  >({
+    accept: "CARD",
+    collect(monitor) {
+      return {
+        handlerId: monitor.getHandlerId(),
+      };
+    },
+    // hover(item: DragItem, mintor) {},
+    drop(item: DragItem) {
+      const dragIndex = item.index;
+      const hoverIndex = props.index;
+
+      props.onTakePlace(dragIndex, hoverIndex);
+    },
+  });
+
+  const [{ isDragging }, drag] = useDrag({
+    type: "CARD",
+    item: () => ({
+      id: props.id,
+      index: props.index,
+    }),
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
   // Events
   function onOvertakeRequested() {
     props.onOvertakeRequested(props.id);
   }
 
+  // Take Effects
+  drag(drop(refCardFrame));
+
   // Renders
   return (
-    <div className="flex gap-2 p-2 bg-orange-200 rounded">
+    <div
+      ref={refCardFrame}
+      className="flex gap-2 p-2 bg-orange-200 rounded"
+      data-handler-id={handlerId}
+    >
       <div className="relative max-w-[136px] max-h-[136px]">
         <img
           src={props.imgUrl}
@@ -35,14 +87,22 @@ export function Card(props: CardProps) {
               {props.firstname} {props.lastname}
             </h2>
           </span>
-          <button
-            type="button"
-            className="px-3 py-2 bg-green-300 disabled:opacity-50"
-            disabled={props.place === 0}
-            onClick={onOvertakeRequested}
-          >
-            Overtake
-          </button>
+          <span className="flex items-center gap-2">
+            <button
+              type="button"
+              className="px-3 py-2 bg-green-300 disabled:opacity-50"
+              disabled={props.place === 0}
+              onClick={onOvertakeRequested}
+            >
+              Overtake
+            </button>
+            <button
+              type="button"
+              className="px-3 py-2 cursor-move bg-stone-300 disabled:opacity-50"
+            >
+              Drag
+            </button>
+          </span>
         </div>
         <p className="italic">{props.team}</p>
         <p className="self-end">{props.code}</p>
