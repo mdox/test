@@ -25,9 +25,16 @@ export function Card(props: CardProps) {
       </div>
       <div className="flex flex-col flex-grow">
         <div className="flex items-start justify-between">
-          <h2>
-            {props.firstname} {props.lastname}
-          </h2>
+          <span className="flex items-center flex-grow gap-2">
+            <img
+              src={`https://countryflagsapi.com/svg/${props.country.toLowerCase()}`}
+              alt={props.country}
+              className="max-w-[2rem]"
+            />
+            <h2>
+              {props.firstname} {props.lastname}
+            </h2>
+          </span>
           <button
             type="button"
             className="px-3 py-2 bg-green-300 disabled:opacity-50"
