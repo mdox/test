@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import useSWR from "swr";
 import { Card } from "../components/Card";
@@ -18,6 +19,12 @@ export function DriversPage() {
     );
   }
 
+  // Memos
+  const sortedDriversDatabase: DriversDatabase = useMemo(() => {
+    if (!data) return [];
+    return data.sort((a, b) => (a.place! < b.place! ? -1 : 1));
+  }, [data]);
+
   // Renders
   return (
     <>
@@ -26,15 +33,13 @@ export function DriversPage() {
       </p>
 
       <div className="flex flex-col gap-2 pb-2">
-        {data
-          ? data.map((item) => (
-              <Card
-                key={item.id}
-                {...item}
-                onOvertakeRequested={onOvertakeRequested}
-              />
-            ))
-          : null}
+        {sortedDriversDatabase.map((item) => (
+          <Card
+            key={item.id}
+            {...item}
+            onOvertakeRequested={onOvertakeRequested}
+          />
+        ))}
       </div>
     </>
   );
