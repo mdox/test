@@ -26,6 +26,18 @@ function swapPlaces(driverA: Driver, driverB: Driver) {
   driverB.place = tmp;
 }
 
+function moveToPlace(driverA: Driver, holderPlace: number) {
+  const db = getDriversDatabase()!;
+  const sorted = db.slice().sort((a, b) => a.place! - b.place!);
+  const dir = driverA.place! < holderPlace ? 1 : -1;
+
+  for (var i = sorted.indexOf(driverA); i != holderPlace; i += dir) {
+    const driverB = sorted[i + dir];
+    if (!driverB) break;
+    swapPlaces(driverA, driverB);
+  }
+}
+
 //
 
 driversRouter.get("/drivers", (_, response) => {
@@ -53,5 +65,30 @@ driversRouter.post("/drivers/:id/overtake", (request, response) => {
 
   sendResponse(response, 201);
 });
+
+driversRouter.post(
+  "/drivers/:takerId/takeplace/:holderId",
+  (request, response) => {
+    const db = getDriversDatabase();
+
+    if (!db) return sendResponseNoDatabase(response);
+
+    const takerId = parseInt(request.params["takerId"]);
+    const holderId = parseInt(request.params["holderId"]);
+
+    if (isNaN(takerId)) return sendResponse(response, 400);
+    if (isNaN(holderId)) return sendResponse(response, 400);
+
+    const driverA = db.find((driver) => driver.id === takerId);
+    const driverB = db.find((driver) => driver.id === holderId);
+
+    if (!driverA) return sendResponse(response, 404);
+    if (!driverB) return sendResponse(response, 404);
+
+    moveToPlace(driverA, driverB.place!);
+
+    sendResponse(response, 201);
+  }
+);
 
 export default driversRouter;
