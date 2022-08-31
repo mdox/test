@@ -17,7 +17,7 @@
 
 ## Tasks
 
-- [ ] Display flags instead of country text code via the task given api
+- [ ] Display country flags via api
 - [ ] Drag and drop for reordering
 - [ ] Add PostgreSQL and _Dockerized_ it, use it as a database, remove the in-memory strategy
 - [ ] CSS animation after drivers reorder
