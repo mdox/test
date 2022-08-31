@@ -1,3 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply bg-orange-100;
+}
+
+h1 {
+  @apply text-3xl;
+  margin: 0.25em 0 0.75em;
+}
+
+h2 {
+  @apply text-3xl;
+  margin: 0.25em 0 0.75em;
+}
+
+h3 {
+  @apply text-3xl;
+  margin: 0.25em 0 0.75em;
+}
+
+p {
+  @apply text-base;
+  margin: 0.25em 0 0.75em;
+}
+
+a {
+  @apply text-blue-500;
+}
