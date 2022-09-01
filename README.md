@@ -1,6 +1,6 @@
-# Basic Part
+# First Part
 
-## Basic Tasks
+## Tasks
 
 - [x] Backend
   - [x] Get drivers list. GET /api/drivers
@@ -13,12 +13,126 @@
   - [x] Button for POST /api/drivers/{driverId}/overtake
   - [x] Minimal styling
 
-# Challenging Part
+# Second Part
 
 ## Tasks
 
 - [x] Display country flags via api
-- [ ] Drag and drop for reordering
+- [x] Drag and drop for reordering
 - [ ] Add PostgreSQL and _Dockerized_ it, use it as a database, remove the in-memory strategy
 - [ ] CSS animation after drivers reorder
 - [ ] Basic tests for backend using Jest
+
+# Dependencies
+
+## First Part
+
+- nodejs
+- npm
+  - pnpm (optional)
+  - yarn (optional)
+
+## Second Part (after First Part)
+
+- docker
+- docker-composer
+
+# Usage
+
+## Install
+
+```sh
+# terminal A
+# backend
+# ! The current directory is the root directory
+cd backend
+pnpm install
+
+# terminal B
+# frontend
+# ! The current directory is the root directory
+cd frontend
+pnpm install
+```
+
+## Run Dev
+
+```sh
+# terminal A
+# backend
+# ! The current directory is the root directory
+cd backend
+# pnpm install
+pnpm run dev
+
+# terminal B
+# frontend
+# ! The current directory is the root directory
+cd frontend
+# pnpm install
+pnpm run start
+
+# ! In First Part Will run at host: http://localhost:3771
+# ! In Second Part Will run at host: http://localhost:3000
+```
+
+## Build
+
+```sh
+# terminal A
+# backend
+# ! The current directory is the root directory
+cd backend
+# pnpm install
+pnpm run build
+
+# terminal B
+# frontend
+# ! The current directory is the root directory
+cd frontend
+# pnpm install
+pnpm run build
+```
+
+## Run Production
+
+```sh
+# terminal A
+cd backend
+pnpm run serve
+```
+
+# Detailing Test Results
+
+## First Part
+
+- Tests succeeded by manual checks.
+
+## Second Part
+
+- Partly tested in NodeJS
+- NOT FINISHED
+
+# NOT FINISHED
+
+- Failed at the task, "Add PostgreSQL and _Dockerized_ it, use it as a database, remove the in-memory strategy"
+
+  - Reason: out of time by wrong decision
+  - Solution in the Future:
+    - A library _TypeORM_ was known by the developer already
+
+# VERSIONS
+
+## First Part
+
+```sh
+# pwd: root dir
+git checkout core
+```
+
+## Second Part (Unfinished)
+
+```sh
+# pwd: root dir
+git checkout master
+```
