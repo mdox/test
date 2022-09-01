@@ -1,5 +1,6 @@
 import express from "express";
 import { resolve } from "path";
+import { dropDrivers, getDrivers, setupDBTable } from "./queries";
 import driversRouter from "./routes/drivers/drivers.routes";
 
 const app = express();
@@ -7,6 +8,13 @@ const app = express();
 app.use(express.json());
 app.use("/static", express.static(resolve("database/static")));
 app.use("/api", driversRouter);
+
+void getDrivers;
+void dropDrivers;
+// app.use("/test", getDrivers);
+// app.use("/drop", dropDrivers);
+
+setupDBTable(() => {});
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(resolve("../frontend/build")));
